@@ -1,0 +1,39 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <div class="main">
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        </div>
+
+        <div class="content px-4">
+            @{ #if !NET5_0}
+            <ErrorBoundary @ref="errorBoundaryRef">
+                <ChildContent>
+                    @Body
+                </ChildContent>
+                <ErrorContent>
+                    <p class="errorUI">Something goes wrong.Sorry!</p>
+                </ErrorContent>
+            </ErrorBoundary>
+            @{ #else}
+            @Body
+            @{ #endif}
+        </div>
+    </div>
+</div>
+
+@code {
+#if !NET5_0
+    private ErrorBoundary errorBoundary;
+
+    protected override void OnParametersSet()
+    {
+        errorBoundary?.Recover();
+    }
+#endif
+}
